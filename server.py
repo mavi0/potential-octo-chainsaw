@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from config import HOSTS
 
-import hashlib
+import hashlib, json
 
 app = Flask(__name__)
 
@@ -10,19 +10,23 @@ hosts_uuid = []
 def gen_uuids(hosts):
     for host in hosts:
         hosts_uuid.append(hashlib.md5(host.encode('utf-8')).hexdigest())
-
-@app.route('/api/add_message/<uuid>', methods=['GET', 'POST'])
-@app.route('/api/get_message/<uuid>', methods=['GET'])
+    print(hosts_uuid)
 
 
-def get_message(uuid):
+@app.route('/api/get_stats/<uuid>', methods=['GET'])
+def get_stats(uuid):
     content = "MESSAGE"
     return jsonify({"content":content})
 
-def add_message(uuid):
-    content = request.json
-    print(content)
-    return jsonify({"uuid":uuid})
+@app.route('/api/set_stats/<uuid>', methods=['GET', 'POST'])
+def set_stats(uuid):
+    for host_uuid in hosts_uuid:
+        if uuid == host_uuid:
+            with open(uuid + '.json', 'w') as f:
+                json.dump(request.json, f)
+            return make_response("OK", 200)
+    
+    return make_response("UUID Not Found", 404)
 
 
 if __name__ == '__main__':
