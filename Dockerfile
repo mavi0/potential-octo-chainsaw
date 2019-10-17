@@ -10,6 +10,7 @@ RUN pip3 install schedule \
 COPY . /remonitor
 
 RUN chmod +x main.sh
+RUN nohup python3 cleanup.py &
 
-EXPOSE 5050
-ENTRYPOINT ["./main.sh"]
+EXPOSE 5000
+ENTRYPOINT ["python3 server.py"]
