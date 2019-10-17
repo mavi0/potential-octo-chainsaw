@@ -9,7 +9,6 @@ RUN pip3 install schedule \
 
 COPY . /remonitor
 
-RUN chmod +x main.sh
 RUN nohup python3 cleanup.py &
 
 EXPOSE 5000
