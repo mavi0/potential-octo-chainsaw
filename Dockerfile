@@ -12,4 +12,4 @@ COPY . /remonitor
 RUN nohup python3 cleanup.py &
 
 EXPOSE 5000
-ENTRYPOINT ["python3 server.py"]
+CMD ["python3", "server.py"]
